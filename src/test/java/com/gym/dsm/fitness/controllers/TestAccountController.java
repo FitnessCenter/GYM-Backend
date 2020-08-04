@@ -1,5 +1,7 @@
 package com.gym.dsm.fitness.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @ExtendWith(SpringExtension.class)
@@ -25,27 +29,36 @@ public class TestAccountController {
 
     @Test
     public void testCreateAccount() throws Exception {
-        ResultActions actions = requestFactory("POST");
+        ResultActions resultActions = requestFactory("POST");
+
+        resultActions
+                .andExpect(status().isOk())
+                .andDo(print());
     }
 
     private ResultActions requestFactory(String method) throws Exception{
         switch (method) {
             case "POST":
-                String requestData = jsonMapper("1101", "김어진", "eojindev", "p@ssword", true);
-                return this.postAccount(requestData);
+                Object account = Account.builer()
+                .studentNumber("1101")
+                .studentName("김어진")
+                .id("eojindev")
+                .password("p@ssword")
+                .sex(true);
+
+                return postAccount(account);
+
             default:
                 throw new Exception();
         }
     }
 
-    private ResultActions postAccount(String content) throws Exception {
+    private ResultActions postAccount(Object object) throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+
         return mvc.perform(post(this.url)
             .contentType(MediaType.APPLICATION_JSON)
             .header("X-Content-Type-Options", "nosniff")
-            .content(content));
-    }
-
-    private String jsonMapper(String studentNumber, String studentName, String id, String password, Boolean sex) {
-        return "";
+            .content(objectMapper.writeValueAsString(object)));
     }
 }
