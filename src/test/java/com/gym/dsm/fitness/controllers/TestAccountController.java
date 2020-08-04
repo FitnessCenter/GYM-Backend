@@ -11,7 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -24,41 +27,67 @@ public class TestAccountController {
     @Autowired
     private MockMvc mvc;
 
-    @MockBean
-    private AccountService accountService;
+    @Autowired
+    private JWTProvider jwtProvider;
 
     @Test
-    public void testCreateAccount() throws Exception {
-        ResultActions resultActions = requestFactory("POST");
+    public void testGetAccount() throws Exception {
+        ResultActions resultActions = requestFactory("GET");
 
         resultActions
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
+    @Test
+    public void testCreateAccount() throws Exception {
+        ResultActions resultActions = requestFactory("POST");
+
+        resultActions
+                .andExpect(status().isCreated())
+                .andDo(print());
+    }
+
+
     private ResultActions requestFactory(String method) throws Exception{
         switch (method) {
+            case "GET":
+                return getAccount(jwtProvider.generateAccessToken());
+
             case "POST":
-                Object account = Account.builer()
-                .studentNumber("1101")
-                .studentName("김어진")
-                .id("eojindev")
-                .password("p@ssword")
-                .sex(true);
+                Object createAccountRequest = new CreateAccountRequest("1101", "김어진", "eojindev", "p@ssword", true);
+                return postAccount(createAccountRequest);
 
-                return postAccount(account);
-
+            case "PUT":
+                Object updateAccountRequest = new UpdateAccountRequest("currentlyP@ssword", "p@ssword");
+                return postAccount(updateAccountRequest, jwtProvider.generateAccessToken());
             default:
                 throw new Exception();
         }
     }
 
-    private ResultActions postAccount(Object object) throws Exception {
+    private ResultActions getAccount(String token) throws Exception {
+        return mvc.perform(get(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token));
+    }
+
+    private ResultActions postAccount(Object body) throws Exception {
+        return mvc.perform(post(url)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(jsonMapper(body)));
+    }
+
+    private ResultActions updateAccount(Object body, String token) throws Exception {
+        return mvc.perform(put(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", token)
+                .content(jsonMapper(body)));
+    }
+
+    private String jsonMapper(Object object) throws JsonProcessingException{
         ObjectMapper objectMapper = new ObjectMapper();
 
-        return mvc.perform(post(this.url)
-            .contentType(MediaType.APPLICATION_JSON)
-            .header("X-Content-Type-Options", "nosniff")
-            .content(objectMapper.writeValueAsString(object)));
+        return objectMapper.writeValueAsString(object);
     }
 }
