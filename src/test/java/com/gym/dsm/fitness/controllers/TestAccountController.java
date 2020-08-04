@@ -32,7 +32,7 @@ public class TestAccountController {
     private JWTProvider jwtProvider;
 
     @MockBean
-    private AuthServiceImpl authService;
+    private AccountServiceImpl accountService;
 
     @Test
     public void testGetAccount() throws Exception {
