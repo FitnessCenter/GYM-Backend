@@ -48,6 +48,14 @@ public class TestAccountController {
                 .andDo(print());
     }
 
+    @Test
+    public void testUpdateAccount() throws Exception {
+        ResultActions resultActions = requestFactory("PUT");
+
+        resultActions
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
 
     private ResultActions requestFactory(String method) throws Exception{
         switch (method) {
