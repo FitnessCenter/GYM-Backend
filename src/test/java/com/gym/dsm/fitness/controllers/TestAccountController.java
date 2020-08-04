@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -64,37 +65,35 @@ public class TestAccountController {
     private ResultActions requestFactory(String method) throws Exception{
         switch (method) {
             case "GET":
-                return getAccount(jwtProvider.generateAccessToken());
+                return getAccount(get(url), jwtProvider.generateAccessToken());
 
             case "POST":
                 Object createAccountRequest = new CreateAccountRequest("1101", "김어진", "eojindev", "p@ssword", true);
-                return postAccount(createAccountRequest);
+                return postAccount(post(url), createAccountRequest);
 
             case "PUT":
                 Object updateAccountRequest = new UpdateAccountRequest("currentlyP@ssword", "p@ssword");
-                return postAccount(updateAccountRequest, jwtProvider.generateAccessToken());
+                return postAccount(put(url), updateAccountRequest, jwtProvider.generateAccessToken());
             default:
                 throw new Exception();
         }
     }
 
-    private ResultActions getAccount(String token) throws Exception {
-        return mvc.perform(get(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", token));
+    private ResultActions requestAccount(
+            MockHttpServletRequestBuilder requestBuilder, String token, Object body) throws Exception {
+
+        MockHttpServletRequestBuilder request = registerRequestBuilder(requestBuilder, token, body);
+        return mvc.perform(request);
     }
 
-    private ResultActions postAccount(Object body) throws Exception {
-        return mvc.perform(post(url)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(jsonMapper(body)));
-    }
+    private MockHttpServletRequestBuilder registerRequestBuilder(
+            MockHttpServletRequestBuilder requestBuilder, String token, Object body) throws Exception {
 
-    private ResultActions updateAccount(Object body, String token) throws Exception {
-        return mvc.perform(put(url)
-                .contentType(MediaType.APPLICATION_JSON)
-                .header("Authorization", token)
-                .content(jsonMapper(body)));
+        MockHttpServletRequestBuilder request = requestBuilder.contentType(MediaType.APPLICATION_JSON);
+        if (token != null) requestBuilder.header("Authorzation". token);
+        if (body != null) requestBuilder.content(jsonMapper(body));
+
+        return request;
     }
 
     private String jsonMapper(Object object) throws JsonProcessingException{
