@@ -65,24 +65,21 @@ public class TestAccountController {
     private ResultActions requestFactory(String method) throws Exception{
         switch (method) {
             case "GET":
-                return getAccount(get(url), jwtProvider.generateAccessToken());
+                return requestAccount(registerRequestBuilder(get(url), jwtProvider.generateAccessToken));
 
             case "POST":
                 Object createAccountRequest = new CreateAccountRequest("1101", "김어진", "eojindev", "p@ssword", true);
-                return postAccount(post(url), createAccountRequest);
+                return requestAccount(registerRequestBuilder(post(url), token=null, body=createAccountRequest));
 
             case "PUT":
                 Object updateAccountRequest = new UpdateAccountRequest("currentlyP@ssword", "p@ssword");
-                return postAccount(put(url), updateAccountRequest, jwtProvider.generateAccessToken());
+                return requestAccount(registerRequestBuilder(put(url), updateAccountRequest, jwtProvider.generateAccessToken));
             default:
                 throw new Exception();
         }
     }
 
-    private ResultActions requestAccount(
-            MockHttpServletRequestBuilder requestBuilder, String token, Object body) throws Exception {
-
-        MockHttpServletRequestBuilder request = registerRequestBuilder(requestBuilder, token, body);
+    private ResultActions requestAccount(MockHttpServletRequestBuilder request) throws Exception {
         return mvc.perform(request);
     }
 
