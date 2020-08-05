@@ -2,9 +2,12 @@ package com.gym.dsm.fitness.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gym.dsm.fitness.security.JWTProvider;
+import lombok.Builder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AccountController.class)
 public class TestAccountController {
-    private String url = "/account";
 
     @Autowired
     private MockMvc mvc;
@@ -63,17 +65,32 @@ public class TestAccountController {
     }
 
     private ResultActions requestFactory(String method) throws Exception{
+        String url = "/account";
         switch (method) {
             case "GET":
-                return requestAccount(registerRequestBuilder(get(url), jwtProvider.generateAccessToken));
+                RequestBuilder getRequestBuilder = RequestBuilder.builder()
+                        .requestBuilder(get(url))
+                        .token(jwtProvider.generateAccessToken())
+                        .build();
+                return requestAccount(getRequestBuilder.getRequest());
 
             case "POST":
                 Object createAccountRequest = new CreateAccountRequest("1101", "김어진", "eojindev", "p@ssword", true);
-                return requestAccount(registerRequestBuilder(post(url), token=null, body=createAccountRequest));
+                RequestBuilder postRequestBuilder = RequestBuilder.builder()
+                        .requestBuilder(post(url))
+                        .body(createAccountRequest)
+                        .build();
+                return requestAccount(postRequestBuilder.getRequest());
 
             case "PUT":
                 Object updateAccountRequest = new UpdateAccountRequest("currentlyP@ssword", "p@ssword");
-                return requestAccount(registerRequestBuilder(put(url), updateAccountRequest, jwtProvider.generateAccessToken));
+                RequestBuilder putRequestBuilder = RequestBuilder.builder()
+                        .requestBuilder(put(url))
+                        .token(jwtProvider.generateAccessToken())
+                        .body(updateAccountRequest)
+                        .build();
+                return requestAccount(putRequestBuilder.getRequest());
+
             default:
                 throw new Exception();
         }
@@ -81,21 +98,5 @@ public class TestAccountController {
 
     private ResultActions requestAccount(MockHttpServletRequestBuilder request) throws Exception {
         return mvc.perform(request);
-    }
-
-    private MockHttpServletRequestBuilder registerRequestBuilder(
-            MockHttpServletRequestBuilder requestBuilder, String token, Object body) throws Exception {
-
-        MockHttpServletRequestBuilder request = requestBuilder.contentType(MediaType.APPLICATION_JSON);
-        if (token != null) requestBuilder.header("Authorzation". token);
-        if (body != null) requestBuilder.content(jsonMapper(body));
-
-        return request;
-    }
-
-    private String jsonMapper(Object object) throws JsonProcessingException{
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        return objectMapper.writeValueAsString(object);
     }
 }
