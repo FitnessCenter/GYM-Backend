@@ -2,7 +2,9 @@ package com.gym.dsm.fitness.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gym.dsm.fitness.payloads.request.CreateAccountRequest;
 import com.gym.dsm.fitness.security.JWTProvider;
+import com.gym.dsm.fitness.services.AccountService;
 import lombok.Builder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +37,7 @@ public class TestAccountController {
     private JWTProvider jwtProvider;
 
     @MockBean
-    private AccountServiceImpl accountService;
+    private AccountService accountService;
 
     @Test
     public void testGetAccount() throws Exception {
@@ -72,23 +74,37 @@ public class TestAccountController {
                         .requestBuilder(get(url))
                         .token(jwtProvider.generateAccessToken())
                         .build();
+
                 return requestAccount(getRequestBuilder.getRequest());
 
             case "POST":
-                Object createAccountRequest = new CreateAccountRequest("1101", "김어진", "eojindev", "p@ssword", true);
+                CreateAccountRequest createAccountRequest = CreateAccountRequest.builder()
+                        .id("eojindev")
+                        .password("p@ssword")
+                        .studentName("김어진")
+                        .studentNumber("1101")
+                        .sex(true)
+                        .build();
+
                 RequestBuilder postRequestBuilder = RequestBuilder.builder()
                         .requestBuilder(post(url))
                         .body(createAccountRequest)
                         .build();
+
                 return requestAccount(postRequestBuilder.getRequest());
 
             case "PUT":
-                Object updateAccountRequest = new UpdateAccountRequest("currentlyP@ssword", "p@ssword");
+                UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
+                        .currentPassword("currentP@ssword")
+                        .newPassword("p@ssword")
+                        .build();
+
                 RequestBuilder putRequestBuilder = RequestBuilder.builder()
                         .requestBuilder(put(url))
                         .token(jwtProvider.generateAccessToken())
                         .body(updateAccountRequest)
                         .build();
+
                 return requestAccount(putRequestBuilder.getRequest());
 
             default:
