@@ -1,4 +1,4 @@
-﻿package com.gym.dsm.fitness.controllers;
+package com.gym.dsm.fitness.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,17 +6,11 @@ import lombok.Builder;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+@Builder
 public class RequestBuilder {
     private MockHttpServletRequestBuilder requestBuilder;
     private String token;
     private Object body;
-
-    @Builder
-    public RequestBuilder(MockHttpServletRequestBuilder requestBuilder, String token, Object body) throws Exception {
-        this.requestBuilder = requestBuilder;
-        this.token = token;
-        this.body = body;
-    }
 
     public MockHttpServletRequestBuilder getRequest() throws Exception {
         return requestMapping();
