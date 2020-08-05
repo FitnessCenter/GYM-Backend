@@ -1,5 +1,6 @@
 package com.gym.dsm.fitness.payloads.request;
 
+import lombok.Builder;
 import lombok.Getter;
 
 import javax.validation.constraints.Max;
@@ -7,6 +8,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
 @Getter
+@Builder
 public class CreateAccountRequest {
 
     @Max(4)
@@ -21,6 +23,6 @@ public class CreateAccountRequest {
 
     @NotEmpty
     private String password;
-    
+
     private Boolean sex;
 }
