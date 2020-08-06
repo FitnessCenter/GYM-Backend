@@ -3,6 +3,7 @@ package com.gym.dsm.fitness.controllers;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gym.dsm.fitness.payloads.request.CreateAccountRequest;
+import com.gym.dsm.fitness.payloads.response.CreateAccountResponse;
 import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.AccountService;
 import lombok.Builder;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -86,6 +88,12 @@ public class TestAccountController {
                         .sex(true)
                         .build();
 
+                CreateAccountResponse mockResponse = CreateAccountResponse.builder()
+                        .message("Created")
+                        .build();
+
+                when(accountService.createAccount(createAccountRequest)).thenReturn(mockResponse);
+                
                 RequestBuilder postRequestBuilder = RequestBuilder.builder()
                         .requestBuilder(post(url))
                         .body(createAccountRequest)
