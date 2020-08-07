@@ -1,4 +1,4 @@
-package com.gym.dsm.fitness.entites.user;
+package com.gym.dsm.fitness.entities.user;
 
 
 import lombok.Builder;
@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Builder
 public class User {
     @Id
-    private Integer id;
+    private String id;
 
     @Column(unique = true, nullable = false)
     private String studentNumber;
