@@ -1,7 +1,7 @@
 package com.gym.dsm.fitness.controllers;
 
 import com.gym.dsm.fitness.payloads.request.EquipmentApplyRequest;
-import com.gym.dsm.fitness.payloads.request.EquipmentApplyResponse;
+import com.gym.dsm.fitness.payloads.response.EquipmentApplyResponse;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import lombok.RequiredArgsConstructor;
 
