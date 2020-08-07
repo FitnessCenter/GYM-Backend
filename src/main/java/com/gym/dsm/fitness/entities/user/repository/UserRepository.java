@@ -1,6 +1,6 @@
-package com.gym.dsm.fitness.entites.user.repository;
+package com.gym.dsm.fitness.entities.user.repository;
 
-import com.gym.dsm.fitness.entites.user.User;
+import com.gym.dsm.fitness.entities.user.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
