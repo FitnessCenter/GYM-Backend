@@ -1,8 +1,7 @@
 package com.gym.dsm.fitness.services;
 
-import com.gym.dsm.fitness.payloads.request.EquipmentApplyRequest;
-import com.gym.dsm.fitness.payloads.response.EquipmentApplyResponse;
-import org.springframework.stereotype.Service;
+import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
+import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 
 import java.util.List;
 

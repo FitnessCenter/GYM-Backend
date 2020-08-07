@@ -1,15 +1,13 @@
 package com.gym.dsm.fitness.controllers;
 
-import com.gym.dsm.fitness.payloads.request.EquipmentApplyRequest;
-import com.gym.dsm.fitness.payloads.response.EquipmentApplyResponse;
+import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
+import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -21,23 +19,23 @@ public class EquipmentApplyController {
 
 
     @GetMapping
-    public List<EquipmentApplyResponse> getEquipmentApplies(){
+    public List<EquipmentApplyResponse> getEquipmentApplies() {
         return equipmentApplyService.getEquipmentApplies();
     }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public void createEquipmentApply(@RequestBody @Valid EquipmentApplyRequest request){
+    public void createEquipmentApply(@RequestBody @Valid EquipmentApplyRequest request) {
         equipmentApplyService.createEquipmentApply(request);
     }
 
     @PutMapping("/{id}")
-    public void updateEquipmentApply(@PathVariable Integer id){
+    public void updateEquipmentApply(@PathVariable Integer id) {
         equipmentApplyService.updateEquipmentApply(id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteEquipmentApply(@PathVariable Integer id){
+    public void deleteEquipmentApply(@PathVariable Integer id) {
         equipmentApplyService.deleteEquipmentApply(id);
     }
 

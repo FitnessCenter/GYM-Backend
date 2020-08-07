@@ -3,8 +3,8 @@ package com.gym.dsm.fitness.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gym.dsm.fitness.controllers.EquipmentApplyController;
-import com.gym.dsm.fitness.payloads.request.EquipmentApplyRequest;
-import com.gym.dsm.fitness.payloads.response.EquipmentApplyResponse;
+import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
+import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

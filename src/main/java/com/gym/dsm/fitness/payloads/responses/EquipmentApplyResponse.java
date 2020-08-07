@@ -1,11 +1,9 @@
-package com.gym.dsm.fitness.payloads.request;
-
+package com.gym.dsm.fitness.payloads.responses;
 
 
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
