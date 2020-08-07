@@ -1,8 +1,7 @@
-package com.gym.dsm.fitness.controller;
+package com.gym.dsm.fitness.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.gym.dsm.fitness.controllers.EquipmentApplyController;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
