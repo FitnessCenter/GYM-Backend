@@ -5,9 +5,9 @@ import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 
 import java.util.List;
 
-@Service
 public interface EquipmentApplyService {
     List<EquipmentApplyResponse> getEquipmentApplies();
     void createEquipmentApply(EquipmentApplyRequest request);
+    void updateEquipmentApply(Integer id);
     void deleteEquipmentApply(Integer id);
 }
