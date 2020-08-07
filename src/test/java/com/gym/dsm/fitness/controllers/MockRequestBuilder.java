@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 @Builder
-public class RequestBuilder {
+public class MockRequestBuilder {
     private MockHttpServletRequestBuilder requestBuilder;
     private String token;
     private Object body;
