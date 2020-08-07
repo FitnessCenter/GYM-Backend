@@ -1,4 +1,4 @@
-package com.gym.dsm.fitness.payloads.response;
+package com.gym.dsm.fitness.payloads.responses;
 
 import lombok.Builder;
 import lombok.Getter;
