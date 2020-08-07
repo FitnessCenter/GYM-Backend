@@ -10,4 +10,5 @@ import java.util.List;
 public interface EquipmentApplyService {
     List<EquipmentApplyResponse> getEquipmentApplies();
     void createEquipmentApply(EquipmentApplyRequest request);
+    void deleteEquipmentApply(Integer id);
 }
