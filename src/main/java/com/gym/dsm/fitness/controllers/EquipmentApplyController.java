@@ -31,6 +31,11 @@ public class EquipmentApplyController {
         equipmentApplyService.createEquipmentApply(request);
     }
 
+    @PutMapping("/{id}")
+    public void updateEquipmentApply(@PathVariable Integer id){
+        equipmentApplyService.updateEquipmentApply(id);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteEquipmentApply(@PathVariable Integer id){
         equipmentApplyService.deleteEquipmentApply(id);
