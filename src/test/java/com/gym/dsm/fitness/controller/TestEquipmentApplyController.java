@@ -32,6 +32,22 @@ public class TestEquipmentApplyController {
     private final String url = "/equipment-applies";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final EquipmentApplyRequest request = EquipmentApplyRequest
+            .builder()
+            .numberOfApply(12)
+            .price(3000)
+            .equipmentName("12kg 덤벨")
+            .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
+            .build();
+
+    private final EquipmentApplyResponse response = EquipmentApplyResponse
+            .builder()
+            .id(1)
+            .numberOfApply(12)
+            .price(3000)
+            .equipmentName("12kg 덤벨")
+            .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
+            .build();
 
     @Autowired
     MockMvc mvc;
@@ -41,17 +57,8 @@ public class TestEquipmentApplyController {
 
     @Test
     public void testGetEquipmentApply() throws Exception{
-        List response = new ArrayList<EquipmentApplyResponse>();
-        response.add(
-                EquipmentApplyResponse
-                .builder()
-                .id(1)
-                .numberOfApply(12)
-                .price(3000)
-                .equipmentName("12kg 덤벨")
-                .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
-                .build()
-        );
+        List<EquipmentApplyResponse> response = new ArrayList<>();
+        response.add(this.response);
         when(equipmentApplyService.getEquipmentApplies()).thenReturn(response);
 
         mvc.perform(MockMvcRequestBuilders
@@ -62,15 +69,6 @@ public class TestEquipmentApplyController {
 
     @Test
     public void testCreateEquipmentApply() throws Exception{
-
-        EquipmentApplyRequest request = EquipmentApplyRequest
-                .builder()
-                .numberOfApply(12)
-                .price(3000)
-                .equipmentName("12kg 덤벨")
-                .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
-                .build();
-
         mvc.perform(MockMvcRequestBuilders
                 .post(url)
                 .contentType("application/json")
@@ -80,14 +78,6 @@ public class TestEquipmentApplyController {
     }
 
     @Test void testUpdateEquipmentApply() throws Exception{
-        EquipmentApplyRequest request = EquipmentApplyRequest
-                .builder()
-                .numberOfApply(12)
-                .price(3000)
-                .equipmentName("12kg 덤벨")
-                .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
-                .build();
-
         mvc.perform(MockMvcRequestBuilders
                 .put(url+"/1")
                 .contentType("application/json")
