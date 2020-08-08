@@ -26,11 +26,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = AccountController.class)
 public class TestAccountController {
 
-    @Autowired
-    private MockMvc mvc;
+    private JWTProvider jwtProvider;
 
     @Autowired
-    private JWTProvider jwtProvider;
+    private MockMvc mvc;
 
     @MockBean
     private AccountService accountService;
@@ -66,12 +65,12 @@ public class TestAccountController {
         String url = "/account";
         switch (method) {
             case "GET":
-                RequestBuilder getRequestBuilder = RequestBuilder.builder()
+                MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(get(url))
                         .token(jwtProvider.generateAccessToken())
                         .build();
 
-                return requestAccount(getRequestBuilder.getRequest());
+                return requestAccount(getMockRequestBuilder.getRequest());
 
             case "POST":
                 CreateAccountRequest createAccountRequest = CreateAccountRequest.builder()
@@ -88,12 +87,12 @@ public class TestAccountController {
 
                 when(accountService.createAccount(createAccountRequest)).thenReturn(mockResponse);
 
-                RequestBuilder postRequestBuilder = RequestBuilder.builder()
+                MockRequestBuilder postMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(post(url))
                         .body(createAccountRequest)
                         .build();
 
-                return requestAccount(postRequestBuilder.getRequest());
+                return requestAccount(postMockRequestBuilder.getRequest());
 
             case "PUT":
                 UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
@@ -101,13 +100,13 @@ public class TestAccountController {
                         .newPassword("p@ssword")
                         .build();
 
-                RequestBuilder putRequestBuilder = RequestBuilder.builder()
+                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(put(url))
                         .token(jwtProvider.generateAccessToken())
                         .body(updateAccountRequest)
                         .build();
 
-                return requestAccount(putRequestBuilder.getRequest());
+                return requestAccount(putMockRequestBuilder.getRequest());
 
             default:
                 throw new Exception();
