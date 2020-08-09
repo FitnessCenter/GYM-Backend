@@ -6,12 +6,16 @@ import com.gym.dsm.fitness.exceptions.UserAlreadyExistsException;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void getAccount() {
@@ -31,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
         userRepository.save(
                 User.builder()
                         .id(createAccountRequest.getId())
-                        .password(createAccountRequest.getPassword())
+                        .password(passwordEncoder.encode(createAccountRequest.getPassword()))
                         .studentName(createAccountRequest.getStudentName())
                         .studentNumber(createAccountRequest.getStudentNumber())
                         .sex(createAccountRequest.getSex())
