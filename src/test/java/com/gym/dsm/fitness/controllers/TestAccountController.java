@@ -64,13 +64,13 @@ public class TestAccountController {
     private ResultActions requestFactory(String method) throws Exception{
         String url = "/account";
         switch (method) {
-            case "GET":
-                MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
-                        .requestBuilder(get(url))
-                        .token(jwtProvider.generateAccessToken())
-                        .build();
-
-                return requestAccount(getMockRequestBuilder.getRequest());
+//            case "GET":
+//                MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
+//                        .requestBuilder(get(url))
+//                        .token(jwtProvider.generateAccessToken())
+//                        .build();
+//
+//                return requestAccount(getMockRequestBuilder.getRequest());
 
             case "POST":
                 CreateAccountRequest createAccountRequest = CreateAccountRequest.builder()
@@ -80,6 +80,7 @@ public class TestAccountController {
                         .studentNumber("1101")
                         .sex(true)
                         .build();
+
 
                 CreateAccountResponse mockResponse = CreateAccountResponse.builder()
                         .message("Created")
@@ -94,19 +95,19 @@ public class TestAccountController {
 
                 return requestAccount(postMockRequestBuilder.getRequest());
 
-            case "PUT":
-                UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
-                        .currentPassword("currentP@ssword")
-                        .newPassword("p@ssword")
-                        .build();
-
-                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
-                        .requestBuilder(put(url))
-                        .token(jwtProvider.generateAccessToken())
-                        .body(updateAccountRequest)
-                        .build();
-
-                return requestAccount(putMockRequestBuilder.getRequest());
+//            case "PUT":
+//                UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
+//                        .currentPassword("currentP@ssword")
+//                        .newPassword("p@ssword")
+//                        .build();
+//
+//                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
+//                        .requestBuilder(put(url))
+//                        .token(jwtProvider.generateAccessToken())
+//                        .body(updateAccountRequest)
+//                        .build();
+//
+//                return requestAccount(putMockRequestBuilder.getRequest());
 
             default:
                 throw new Exception();
