@@ -64,13 +64,13 @@ public class TestAccountController {
     private ResultActions requestFactory(String method) throws Exception{
         String url = "/account";
         switch (method) {
-//            case "GET":
-//                MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
-//                        .requestBuilder(get(url))
-//                        .token(jwtProvider.generateAccessToken())
-//                        .build();
-//
-//                return requestAccount(getMockRequestBuilder.getRequest());
+            case "GET":
+                MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
+                        .requestBuilder(get(url))
+                        .token(jwtProvider.generateAccessToken())
+                        .build();
+
+                return requestAccount(getMockRequestBuilder.getRequest());
 
             case "POST":
                 CreateAccountRequest createAccountRequest = CreateAccountRequest.builder()
