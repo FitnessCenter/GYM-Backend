@@ -2,6 +2,7 @@ package com.gym.dsm.fitness.controllers;
 
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
+import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.services.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,12 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AccountController {
     private final AccountService accountService;
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @GetMapping
+    public GetAccountResponse getAccount() {
+        return accountService.getAccount();
+    }
 
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
