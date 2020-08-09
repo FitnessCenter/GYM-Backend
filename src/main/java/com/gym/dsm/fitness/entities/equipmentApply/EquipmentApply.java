@@ -16,7 +16,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class EquipmentApply {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
