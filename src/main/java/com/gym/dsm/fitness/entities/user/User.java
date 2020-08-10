@@ -1,17 +1,16 @@
 package com.gym.dsm.fitness.entities.user;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Getter
-@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     private String id;
