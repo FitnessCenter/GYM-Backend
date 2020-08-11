@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,5 +69,10 @@ public class JWTProvider {
 
     public String getIdFromToken(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public Authentication getAuthentication(String token) {
+        AuthDetails authDetails = authDetailsService.loadUserByUsername(getUserEmail(token));
+        return new UsernamePasswordAuthenticationToken(authDetails, "", authDetails.getAuthorities());
     }
 }
