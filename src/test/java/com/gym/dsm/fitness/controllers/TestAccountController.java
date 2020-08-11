@@ -2,6 +2,7 @@ package com.gym.dsm.fitness.controllers;
 
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
+import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.AccountService;
 import org.junit.jupiter.api.Test;
@@ -67,8 +68,15 @@ public class TestAccountController {
             case "GET":
                 MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(get(url))
-                        .token(jwtProvider.generateAccessToken())
+                        .token(jwtProvider.generateAccessToken("eojindev"))
                         .build();
+
+                GetAccountResponse getMockResponse = GetAccountResponse.builder()
+                        .StudentName("김어진")
+                        .studentNumber("1101")
+                        .build();
+
+                when(accountService.getAccount()).thenReturn(getMockResponse);
 
                 return requestAccount(getMockRequestBuilder.getRequest());
 
@@ -82,11 +90,11 @@ public class TestAccountController {
                         .build();
 
 
-                CreateAccountResponse mockResponse = CreateAccountResponse.builder()
+                CreateAccountResponse createMockResponse = CreateAccountResponse.builder()
                         .message("Created")
                         .build();
 
-                when(accountService.createAccount(createAccountRequest)).thenReturn(mockResponse);
+                when(accountService.createAccount(createAccountRequest)).thenReturn(createMockResponse);
 
                 MockRequestBuilder postMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(post(url))
