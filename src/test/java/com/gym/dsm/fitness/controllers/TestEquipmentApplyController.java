@@ -2,11 +2,14 @@ package com.gym.dsm.fitness.controllers;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
+import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -48,6 +51,17 @@ public class TestEquipmentApplyController {
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
+    private final EquipmentApply entity = EquipmentApply
+            .builder()
+            .id(1)
+            .numberOfApply(12)
+            .price(3000)
+            .equipmentName("12kg 덤벨")
+            .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
+            .appliedUser(User.builder().build())
+            .build();
+
+
     @Autowired
     MockMvc mvc;
 
@@ -56,8 +70,8 @@ public class TestEquipmentApplyController {
 
     @Test
     public void testGetEquipmentApply() throws Exception{
-        List<EquipmentApplyResponse> response = new ArrayList<>();
-        response.add(this.response);
+        List<EquipmentApply> response = new ArrayList<>();
+        response.add(this.entity);
         when(equipmentApplyService.getEquipmentApplies()).thenReturn(response);
 
         mvc.perform(MockMvcRequestBuilders
