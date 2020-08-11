@@ -7,4 +7,8 @@ public class AuthenticationFacade {
     public Authentication getAuthentication() {
         return SecurityContextHolder.getContext().getAuthentication();
     }
+
+    public String getUserId() {
+        return this.getAuthentication().getName();
+    }
 }
