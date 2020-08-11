@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @Component
@@ -45,5 +46,13 @@ public class JWTProvider {
                 .setSubject(id)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
+    }
+
+    public String getTokenFromHeader(HttpServletRequest request) throws Exception {
+        String bearerToken = request.getHeader(header);
+        if (bearerToken != null && bearerToken.startsWith(prefix)) {
+            return bearerToken.substring(7);
+        }
+        throw new Exception();
     }
 }
