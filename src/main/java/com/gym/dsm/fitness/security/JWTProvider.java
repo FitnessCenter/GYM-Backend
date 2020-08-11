@@ -37,4 +37,13 @@ public class JWTProvider {
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
+
+    public String generateRefreshToken(String id) {
+        return Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshTokenExpireTime * 1000))
+                .setSubject(id)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
+    }
 }
