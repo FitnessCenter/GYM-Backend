@@ -55,4 +55,16 @@ public class JWTProvider {
         }
         throw new Exception();
     }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().setSigningKey(secretKey)
+                    .parseClaimsJws(token).getBody().getSubject();
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    
 }
