@@ -3,15 +3,14 @@ package com.gym.dsm.fitness.payloads.requests;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter
 @Builder
 public class CreateAccountRequest {
 
-    @Max(4)
-    @NotEmpty
+    @Size(min = 4, max = 4)
     private String studentNumber;
 
     @NotEmpty
