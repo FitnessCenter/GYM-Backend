@@ -1,5 +1,6 @@
 package com.gym.dsm.fitness.security;
 
+import com.gym.dsm.fitness.exceptions.AuthenticationFailedException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,6 @@ public class JWTProvider {
     @Value("${auth.jwt.prefix}")
     private String prefix;
 
-    private final AuthDetailsService authDetailsService;
-
     public String generateAccessToken(String id) {
         return Jwts.builder()
                 .setIssuedAt(new Date())
@@ -48,12 +47,12 @@ public class JWTProvider {
                 .compact();
     }
 
-    public String getTokenFromHeader(HttpServletRequest request) throws Exception {
+    public String getTokenFromHeader(HttpServletRequest request) {
         String bearerToken = request.getHeader(header);
         if (bearerToken != null && bearerToken.startsWith(prefix)) {
             return bearerToken.substring(7);
         }
-        throw new Exception();
+        throw new AuthenticationFailedException();
     }
 
     public boolean validateToken(String token) {
