@@ -1,13 +1,8 @@
-package com.gym.dsm.fitness.Services;
+package com.gym.dsm.fitness.services;
 
 import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.entities.equipmentApply.repository.EquipmentApplyRepository;
-import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
-import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
-import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
-import com.gym.dsm.fitness.services.EquipmentApplyService;
-import com.gym.dsm.fitness.services.EquipmentApplyServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
