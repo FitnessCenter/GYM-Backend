@@ -16,14 +16,14 @@ import javax.validation.Valid;
 public class AccountController {
     private final AccountService accountService;
 
-    @ResponseStatus(value = HttpStatus.OK)
     @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
     public GetAccountResponse getAccount() {
         return accountService.getAccount();
     }
 
-    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
     public CreateAccountResponse createAccount(@RequestBody @Valid CreateAccountRequest createAccountRequest) {
         return accountService.createAccount(createAccountRequest);
     }
