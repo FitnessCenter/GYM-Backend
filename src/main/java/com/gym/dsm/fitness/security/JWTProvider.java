@@ -66,5 +66,7 @@ public class JWTProvider {
         }
     }
 
-    
+    public String getIdFromToken(String token) {
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
+    }
 }
