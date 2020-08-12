@@ -9,7 +9,6 @@ import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -70,8 +69,8 @@ public class TestEquipmentApplyController {
 
     @Test
     public void testGetEquipmentApply() throws Exception{
-        List<EquipmentApply> response = new ArrayList<>();
-        response.add(this.entity);
+        List<EquipmentApplyResponse> response = new ArrayList<>();
+        response.add(this.response);
         when(equipmentApplyService.getEquipmentApplies()).thenReturn(response);
 
         mvc.perform(MockMvcRequestBuilders
