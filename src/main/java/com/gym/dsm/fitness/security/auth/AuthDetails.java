@@ -2,6 +2,8 @@ package com.gym.dsm.fitness.security.auth;
 
 import com.gym.dsm.fitness.entities.user.User;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +14,6 @@ import java.util.Collection;
 public class AuthDetails implements UserDetails {
 
     private User user;
-    private AuthorityType authorityType;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -47,9 +48,5 @@ public class AuthDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public AuthorityType getAuthorityType() {
-        return authorityType;
     }
 }
