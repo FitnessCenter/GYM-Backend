@@ -5,20 +5,26 @@ import com.gym.dsm.fitness.entities.equipmentApply.repository.EquipmentApplyRepo
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 public class EquipmentApplyServiceImp implements EquipmentApplyService {
     private final EquipmentApplyRepository equipmentApplyRepository;
+    private final ModelMapper modelMapper;
 
     @Override
-    public List<EquipmentApply> getEquipmentApplies() {
+    public List<EquipmentApplyResponse> getEquipmentApplies() {
         List<EquipmentApply> equipmentApplies = equipmentApplyRepository.findAll();
-        return equipmentApplies;
+
+        return equipmentApplies.stream()
+                .map((e) -> modelMapper.map(e, EquipmentApplyResponse.class))
+                .collect(Collectors.toList());
     }
 
     @Override
