@@ -1,12 +1,17 @@
 package com.gym.dsm.fitness.security;
 
 import com.gym.dsm.fitness.exceptions.AuthenticationFailedException;
+import com.gym.dsm.fitness.security.auth.AuthDetails;
+import com.gym.dsm.fitness.security.auth.AuthDetailsService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,16 +25,18 @@ public class JWTProvider {
     private String secretKey;
 
     @Value("${auth.jwt.exp.access}")
-    private Long accessTokenExpireTime;
+    private Integer accessTokenExpireTime;
 
     @Value("${auth.jwt.exp.refresh}")
-    private Long refreshTokenExpireTime;
+    private Integer refreshTokenExpireTime;
 
     @Value("${auth.jwt.header}")
     private String header;
 
     @Value("${auth.jwt.prefix}")
     private String prefix;
+
+    private AuthDetailsService authDetailsService;
 
     public String generateAccessToken(String id) {
         return Jwts.builder()
@@ -72,7 +79,7 @@ public class JWTProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        AuthDetails authDetails = authDetailsService.loadUserByUsername(getUserEmail(token));
+        AuthDetails authDetails = authDetailsService.loadUserByUsername(getIdFromToken(token));
         return new UsernamePasswordAuthenticationToken(authDetails, "", authDetails.getAuthorities());
     }
 }
