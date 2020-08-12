@@ -1,20 +1,31 @@
 package com.gym.dsm.fitness.controllers;
 
+import com.gym.dsm.fitness.FitnessApplication;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
+import com.gym.dsm.fitness.security.JWTFilter;
 import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -25,8 +36,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AccountController.class)
-public class TestAccountController {
+@ContextConfiguration(classes = {FitnessApplication.class, JWTProvider.class})
+class TestAccountController {
 
+    @Autowired
     private JWTProvider jwtProvider;
 
     @Autowired
@@ -34,6 +47,9 @@ public class TestAccountController {
 
     @MockBean
     private AccountService accountService;
+
+    @MockBean
+    private JWTFilter jwtFilter;
 
     @Test
     public void testGetAccount() throws Exception {
@@ -75,7 +91,7 @@ public class TestAccountController {
                         .StudentName("김어진")
                         .studentNumber("1101")
                         .build();
-
+                doNothing().when(jwtFilter).doFilter(any(ServletRequest.class), any(ServletResponse.class), any(FilterChain.class));
                 when(accountService.getAccount()).thenReturn(getMockResponse);
 
                 return requestAccount(getMockRequestBuilder.getRequest());
