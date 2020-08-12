@@ -28,6 +28,6 @@ public class User {
 
     private boolean sex;
 
-    @OneToMany(mappedBy = "applied_user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "appliedUser", cascade = CascadeType.ALL)
     private List<EquipmentApply> equipmentApplies;
 }
