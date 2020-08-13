@@ -5,7 +5,6 @@ import com.gym.dsm.fitness.entities.user.repository.UserRepository;
 import com.gym.dsm.fitness.exceptions.AuthenticationFailedException;
 import com.gym.dsm.fitness.exceptions.UserAlreadyExistsException;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
-import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CreateAccountResponse createAccount(CreateAccountRequest createAccountRequest) {
+    public void createAccount(CreateAccountRequest createAccountRequest) {
         userRepository.findById(createAccountRequest.getId()).ifPresent(user -> {
             throw new UserAlreadyExistsException();
         });
