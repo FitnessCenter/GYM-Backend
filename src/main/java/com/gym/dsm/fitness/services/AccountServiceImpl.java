@@ -51,10 +51,6 @@ public class AccountServiceImpl implements AccountService {
                         .sex(createAccountRequest.getSex())
                         .build()
         );
-
-        return CreateAccountResponse.builder()
-                .message("CREATED")
-                .build();
     }
 
     @Override
