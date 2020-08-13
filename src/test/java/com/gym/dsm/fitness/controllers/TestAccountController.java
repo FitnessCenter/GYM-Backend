@@ -40,16 +40,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class TestAccountController {
 
     @Autowired
-    private JWTProvider jwtProvider;
-
-    @Autowired
     private MockMvc mvc;
 
     @MockBean
     private AccountService accountService;
 
     @MockBean
-    private JWTFilter jwtFilter;
+    private JWTProvider jwtProvider;
 
     @Test
     public void testGetAccount() throws Exception {
@@ -84,14 +81,14 @@ class TestAccountController {
             case "GET":
                 MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(get(url))
-                        .token(jwtProvider.generateAccessToken("eojindev"))
+                        .token("Bearer eya.b.c")
                         .build();
 
                 GetAccountResponse getMockResponse = GetAccountResponse.builder()
                         .StudentName("김어진")
                         .studentNumber("1101")
                         .build();
-                doNothing().when(jwtFilter).doFilter(any(ServletRequest.class), any(ServletResponse.class), any(FilterChain.class));
+
                 when(accountService.getAccount()).thenReturn(getMockResponse);
 
                 return requestAccount(getMockRequestBuilder.getRequest());
@@ -107,7 +104,7 @@ class TestAccountController {
 
 
                 CreateAccountResponse createMockResponse = CreateAccountResponse.builder()
-                        .message("Created")
+                        .message("CREATED")
                         .build();
 
                 when(accountService.createAccount(createAccountRequest)).thenReturn(createMockResponse);
