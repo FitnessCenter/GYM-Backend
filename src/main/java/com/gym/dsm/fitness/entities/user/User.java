@@ -1,10 +1,14 @@
 package com.gym.dsm.fitness.entities.user;
 
 
-import lombok.*;
+import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,4 +29,7 @@ public class User {
     private String password;
 
     private boolean sex;
+
+    @OneToMany(mappedBy = "applied_user", cascade = CascadeType.ALL)
+    private List<EquipmentApply> equipmentApplies;
 }
