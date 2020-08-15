@@ -9,8 +9,8 @@ import javax.validation.constraints.NotEmpty;
 @Builder
 public class UpdatePasswordRequest {
     @NotEmpty
-    private String password;
+    private String currentPassword;
 
     @NotEmpty
-    private String changePassword;
+    private String newPassword;
 }
