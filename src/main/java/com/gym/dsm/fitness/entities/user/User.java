@@ -2,11 +2,7 @@ package com.gym.dsm.fitness.entities.user;
 
 
 import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-
+import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
@@ -32,4 +28,9 @@ public class User {
 
     @OneToMany(mappedBy = "applied_user", cascade = CascadeType.ALL)
     private List<EquipmentApply> equipmentApplies;
+
+    public User updatePassword(String password) {
+        this.password = password;
+        return this;
+    }
 }
