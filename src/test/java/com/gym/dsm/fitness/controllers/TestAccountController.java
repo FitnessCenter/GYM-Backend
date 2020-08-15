@@ -1,19 +1,31 @@
 package com.gym.dsm.fitness.controllers;
 
+import com.gym.dsm.fitness.FitnessApplication;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
-import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
+import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
+import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
+import com.gym.dsm.fitness.security.JWTFilter;
 import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.AccountService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,15 +36,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AccountController.class)
-public class TestAccountController {
-
-    private JWTProvider jwtProvider;
+@ContextConfiguration(classes = {FitnessApplication.class, JWTProvider.class})
+class TestAccountController {
 
     @Autowired
     private MockMvc mvc;
 
     @MockBean
     private AccountService accountService;
+
+    @MockBean
+    private JWTProvider jwtProvider;
 
     @Test
     public void testGetAccount() throws Exception {
@@ -67,8 +81,15 @@ public class TestAccountController {
             case "GET":
                 MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(get(url))
-                        .token(jwtProvider.generateAccessToken())
+                        .token("Bearer eya.b.c")
                         .build();
+
+                GetAccountResponse getMockResponse = GetAccountResponse.builder()
+                        .StudentName("김어진")
+                        .studentNumber("1101")
+                        .build();
+
+                when(accountService.getAccount()).thenReturn(getMockResponse);
 
                 return requestAccount(getMockRequestBuilder.getRequest());
 
@@ -82,11 +103,7 @@ public class TestAccountController {
                         .build();
 
 
-                CreateAccountResponse mockResponse = CreateAccountResponse.builder()
-                        .message("Created")
-                        .build();
-
-                when(accountService.createAccount(createAccountRequest)).thenReturn(mockResponse);
+                doNothing().when(accountService).createAccount(createAccountRequest);
 
                 MockRequestBuilder postMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(post(url))
@@ -95,19 +112,19 @@ public class TestAccountController {
 
                 return requestAccount(postMockRequestBuilder.getRequest());
 
-//            case "PUT":
-//                UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
-//                        .currentPassword("currentP@ssword")
-//                        .newPassword("p@ssword")
-//                        .build();
-//
-//                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
-//                        .requestBuilder(put(url))
-//                        .token(jwtProvider.generateAccessToken())
-//                        .body(updateAccountRequest)
-//                        .build();
-//
-//                return requestAccount(putMockRequestBuilder.getRequest());
+            case "PUT":
+                UpdatePasswordRequest updatePasswordRequest = UpdatePasswordRequest.builder()
+                        .currentPassword("currentP@ssword")
+                        .newPassword("p@ssword")
+                        .build();
+
+                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
+                        .requestBuilder(put(url))
+                        .token("Bearer eya.b.c")
+                        .body(updatePasswordRequest)
+                        .build();
+
+                return requestAccount(putMockRequestBuilder.getRequest());
 
             default:
                 throw new Exception();
