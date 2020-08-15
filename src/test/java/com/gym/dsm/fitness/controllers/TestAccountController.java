@@ -2,7 +2,7 @@ package com.gym.dsm.fitness.controllers;
 
 import com.gym.dsm.fitness.FitnessApplication;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
-import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
+import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.security.JWTFilter;
 import com.gym.dsm.fitness.security.JWTProvider;
@@ -103,11 +103,7 @@ class TestAccountController {
                         .build();
 
 
-                CreateAccountResponse createMockResponse = CreateAccountResponse.builder()
-                        .message("CREATED")
-                        .build();
-
-                when(accountService.createAccount(createAccountRequest)).thenReturn(createMockResponse);
+                doNothing().when(accountService).createAccount(createAccountRequest);
 
                 MockRequestBuilder postMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(post(url))
@@ -116,19 +112,19 @@ class TestAccountController {
 
                 return requestAccount(postMockRequestBuilder.getRequest());
 
-//            case "PUT":
-//                UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
-//                        .currentPassword("currentP@ssword")
-//                        .newPassword("p@ssword")
-//                        .build();
-//
-//                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
-//                        .requestBuilder(put(url))
-//                        .token(jwtProvider.generateAccessToken())
-//                        .body(updateAccountRequest)
-//                        .build();
-//
-//                return requestAccount(putMockRequestBuilder.getRequest());
+            case "PUT":
+                UpdatePasswordRequest updatePasswordRequest = UpdatePasswordRequest.builder()
+                        .currentPassword("currentP@ssword")
+                        .newPassword("p@ssword")
+                        .build();
+
+                MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
+                        .requestBuilder(put(url))
+                        .token("Bearer eya.b.c")
+                        .body(updatePasswordRequest)
+                        .build();
+
+                return requestAccount(putMockRequestBuilder.getRequest());
 
             default:
                 throw new Exception();

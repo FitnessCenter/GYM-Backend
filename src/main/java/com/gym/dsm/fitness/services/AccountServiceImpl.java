@@ -3,9 +3,10 @@ package com.gym.dsm.fitness.services;
 import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.entities.user.repository.UserRepository;
 import com.gym.dsm.fitness.exceptions.AuthenticationFailedException;
+import com.gym.dsm.fitness.exceptions.PasswordNotMatchException;
 import com.gym.dsm.fitness.exceptions.UserAlreadyExistsException;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
-import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
+import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CreateAccountResponse createAccount(CreateAccountRequest createAccountRequest) {
+    public void createAccount(CreateAccountRequest createAccountRequest) {
         userRepository.findById(createAccountRequest.getId()).ifPresent(user -> {
             throw new UserAlreadyExistsException();
         });
@@ -52,14 +53,17 @@ public class AccountServiceImpl implements AccountService {
                         .sex(createAccountRequest.getSex())
                         .build()
         );
-
-        return CreateAccountResponse.builder()
-                .message("CREATED")
-                .build();
     }
 
     @Override
-    public void updatePassword() {
+    public void updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        User user = userRepository.findById(authenticationFacade.getUserId())
+                .orElseThrow(AuthenticationFailedException::new);
 
+        if (passwordEncoder.matches(updatePasswordRequest.getCurrentPassword(), user.getPassword())) {
+            userRepository.save(user.updatePassword(updatePasswordRequest.getNewPassword()));
+        } else {
+            throw new PasswordNotMatchException();
+        }
     }
 }
