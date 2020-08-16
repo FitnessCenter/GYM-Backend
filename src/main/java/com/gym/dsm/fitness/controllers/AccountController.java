@@ -1,9 +1,11 @@
 package com.gym.dsm.fitness.controllers;
 
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
-import com.gym.dsm.fitness.payloads.responses.CreateAccountResponse;
+import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
+import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.services.AccountService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +17,21 @@ import javax.validation.Valid;
 public class AccountController {
     private final AccountService accountService;
 
-    @ResponseStatus(value = HttpStatus.CREATED)
+    @GetMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public GetAccountResponse getAccount() {
+        return accountService.getAccount();
+    }
+
     @PostMapping
-    public CreateAccountResponse createAccount(@RequestBody @Valid CreateAccountRequest createAccountRequest) {
-        return accountService.createAccount(createAccountRequest);
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public void createAccount(@RequestBody @Valid CreateAccountRequest createAccountRequest) {
+        accountService.createAccount(createAccountRequest);
+    }
+
+    @PutMapping
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updatePassword(@RequestBody @Valid UpdatePasswordRequest updatePasswordRequest) {
+        accountService.updatePassword(updatePasswordRequest);
     }
 }
