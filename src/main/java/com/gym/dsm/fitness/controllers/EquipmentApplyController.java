@@ -3,7 +3,7 @@ package com.gym.dsm.fitness.controllers;
 import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
-import com.gym.dsm.fitness.services.EquipmentApplyService;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
