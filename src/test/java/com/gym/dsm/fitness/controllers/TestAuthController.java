@@ -1,9 +1,14 @@
 package com.gym.dsm.fitness.controllers;
 
+import com.gym.dsm.fitness.payloads.requests.SignInRequest;
+import com.gym.dsm.fitness.payloads.responses.SignInResponse;
+import com.gym.dsm.fitness.security.JWTProvider;
+import com.gym.dsm.fitness.services.Auth.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,6 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestAuthController {
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private AuthService authService;
+
+    @MockBean
+    private JWTProvider jwtProvider;
 
     @Test
     public void testSignIn() throws Exception {
@@ -40,12 +51,12 @@ public class TestAuthController {
                         .password("p@ssword")
                         .build();
 
-                SignInResponse signInResponse = signInResponse.builder()
+                SignInResponse signInResponse = SignInResponse.builder()
                         .accessToken("eya.b.c")
                         .refreshToken("eya.b.d")
                         .build();
 
-                when(AuthService.SignIn(signInRequest)).thenReturn(signInResponse);
+                when(authService.signIn(signInRequest)).thenReturn(signInResponse);
 
                 MockRequestBuilder signInRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(post(url))
