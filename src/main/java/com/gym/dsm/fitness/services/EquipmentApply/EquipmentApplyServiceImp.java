@@ -1,9 +1,9 @@
-package com.gym.dsm.fitness.services;
+package com.gym.dsm.fitness.services.EquipmentApply;
 
 import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.entities.equipmentApply.repository.EquipmentApplyRepository;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
-import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
