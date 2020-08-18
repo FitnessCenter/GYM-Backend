@@ -1,4 +1,4 @@
-package com.gym.dsm.fitness.services;
+package com.gym.dsm.fitness.services.EquipmentApply;
 
 import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;

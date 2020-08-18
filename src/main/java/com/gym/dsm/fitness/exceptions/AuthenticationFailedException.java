@@ -4,5 +4,5 @@ import com.gym.dsm.fitness.errors.BusinessException;
 import com.gym.dsm.fitness.errors.ErrorCode;
 
 public class AuthenticationFailedException extends BusinessException {
-    public AuthenticationFailedException() { super(ErrorCode.TOKEN_AUTHENTICATION_FAILED); }
+    public AuthenticationFailedException() { super(ErrorCode.AUTHENTICATION_FAILED); }
 }
