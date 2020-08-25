@@ -22,13 +22,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .formLogin().disable()
-                .cors().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/account").permitAll()
+                .antMatchers("/auth").permitAll()
                 .and()
-                    .authorizeRequests()
-                        .antMatchers(HttpMethod.POST, "/account/**").permitAll()
-                .and()
-                    .apply(new JWTConfigurer(jwtProvider));
+                .apply(new JWTConfigurer(jwtProvider));
+
     }
 
     @Bean
