@@ -11,4 +11,7 @@ public interface EquipmentApplyRepository extends CrudRepository<EquipmentApply,
     List<EquipmentApply> findAll();
     List<EquipmentApply> findByAppliedUserId(String applyUserId);
     Optional<EquipmentApply> findById(Integer id);
+
+    @Override
+    void deleteById(Integer integer);
 }
