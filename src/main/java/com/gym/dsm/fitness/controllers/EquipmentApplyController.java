@@ -29,8 +29,8 @@ public class EquipmentApplyController {
     }
 
     @PutMapping("/{id}")
-    public void updateEquipmentApply(@PathVariable Integer id) {
-        equipmentApplyService.updateEquipmentApply(id);
+    public void updateEquipmentApply(@PathVariable Integer id, @RequestBody @Valid EquipmentApplyRequest request) {
+        equipmentApplyService.updateEquipmentApply(id, request);
     }
 
     @DeleteMapping("/{id}")
