@@ -6,6 +6,7 @@ import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
+import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -66,6 +67,9 @@ public class TestEquipmentApplyController {
 
     @MockBean
     private EquipmentApplyService equipmentApplyService;
+
+    @MockBean
+    private JWTProvider jwtProvider;
 
     @Test
     public void testGetEquipmentApply() throws Exception{
