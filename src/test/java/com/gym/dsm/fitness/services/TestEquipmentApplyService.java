@@ -3,10 +3,16 @@ package com.gym.dsm.fitness.services;
 import com.gym.dsm.fitness.config.ModelMapperConfiguration;
 import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.entities.equipmentApply.repository.EquipmentApplyRepository;
+import com.gym.dsm.fitness.entities.user.User;
+import com.gym.dsm.fitness.entities.user.repository.UserRepository;
+import com.gym.dsm.fitness.exceptions.AccessDeniedException;
+import com.gym.dsm.fitness.exceptions.NotFoundException;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
+import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,7 +22,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -28,23 +36,112 @@ public class TestEquipmentApplyService {
     @MockBean
     EquipmentApplyRepository equipmentApplyRepository;
 
+    @MockBean
+    UserRepository userRepository;
+
+    @MockBean
+    AuthenticationFacade authenticationFacade;
+
     @Autowired
     EquipmentApplyServiceImp equipmentApplyService;
 
-    private final EquipmentApplyRequest request = EquipmentApplyRequest.builder()
+    private final User user = User
+            .builder()
+            .id("user")
             .build();
 
-    private final EquipmentApply equipmentApply = EquipmentApply.builder()
-            .id(1)
+    private final EquipmentApplyRequest request = EquipmentApplyRequest
+            .builder()
+            .numberOfApply(12)
+            .price(3000)
+            .equipmentName("12kg 덤벨")
+            .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
+
+    private final EquipmentApplyResponse response = EquipmentApplyResponse
+            .builder()
+            .id(1)
+            .numberOfApply(12)
+            .price(3000)
+            .equipmentName("12kg 덤벨")
+            .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
+            .build();
+
+    private final EquipmentApply entity = EquipmentApply
+            .builder()
+            .id(1)
+            .numberOfApply(12)
+            .price(3000)
+            .equipmentName("12kg 덤벨")
+            .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
+            .appliedUser(user)
+            .build();
+
 
     @Test
     public void when_get_equipment_apply_it_should_return_equipment_apply_list(){
         ArrayList<EquipmentApply> equipmentApplies = new ArrayList<>();
-        equipmentApplies.add(this.equipmentApply);
+        equipmentApplies.add(this.entity);
         when(equipmentApplyRepository.findAll()).thenReturn(equipmentApplies);
 
         List<EquipmentApplyResponse> gotEquipmentApplies = equipmentApplyService.getEquipmentApplies();
-        assertThat(gotEquipmentApplies.get(0).getId(), is(equipmentApply.getId()));
+        assertThat(gotEquipmentApplies.get(0).getId(), is(entity.getId()));
     }
+
+    @Test
+    public void throwNotFoundExceptionWhenDeletetNotExistReportId(){
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.ofNullable(null));
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+
+        try{
+            equipmentApplyService.deleteEquipmentApply(this.entity.getId());
+        }catch (NotFoundException e){
+            assertThat(e.getMessage(), is("Not found"));
+        }
+
+    }
+
+    @Test()
+    public void throwAccessDeniedExceptionWhenDeleteWithoutAuthority(){
+        EquipmentApply equipmentApply = this.entity;
+        equipmentApply.setAppliedUser(User.builder().id("test_2").build());
+
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(equipmentApply));
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+
+        try {
+            equipmentApplyService.deleteEquipmentApply(this.entity.getId());
+        } catch (AccessDeniedException e){
+            assertThat(e.getMessage(), is("Access denied"));
+        }
+    }
+
+    @Test
+    public void delete_equipment_apply_correctly(){
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+
+        equipmentApplyService.deleteEquipmentApply(this.entity.getId());
+    }
+
+    @Test
+    public void update_equipment_apply_correctly(){
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+
+        equipmentApplyService.updateEquipmentApply(this.entity.getId(), this.request);
+    }
+
+    @Test
+    public void create_equipment_apply(){
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+
+        equipmentApplyService.createEquipmentApply(this.request);
+    }
+
 }
