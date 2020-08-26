@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -78,8 +79,19 @@ public class TestEquipmentApplyService {
             .build();
 
 
+
     @Test
-    public void when_get_equipment_apply_it_should_return_equipment_apply_list(){
+    public void createEquipmentApply(){
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+
+        equipmentApplyService.createEquipmentApply(this.request);
+    }
+
+
+
+    @Test
+    public void whenGetEquipmentApplyItShouldReturnEquipmentApplyList(){
         ArrayList<EquipmentApply> equipmentApplies = new ArrayList<>();
         equipmentApplies.add(this.entity);
         when(equipmentApplyRepository.findAll()).thenReturn(equipmentApplies);
@@ -88,22 +100,31 @@ public class TestEquipmentApplyService {
         assertThat(gotEquipmentApplies.get(0).getId(), is(entity.getId()));
     }
 
+
+
     @Test
-    public void throwNotFoundExceptionWhenDeletetNotExistReportId(){
+    public void updateEquipmentApplyCorrectly(){
         when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
-        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.ofNullable(null));
+        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
         when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
 
-        try{
-            equipmentApplyService.deleteEquipmentApply(this.entity.getId());
-        }catch (NotFoundException e){
-            assertThat(e.getMessage(), is("Not found"));
-        }
-
+        equipmentApplyService.updateEquipmentApply(this.entity.getId(), this.request);
     }
 
-    @Test()
-    public void throwAccessDeniedExceptionWhenDeleteWithoutAuthority(){
+
+
+    @Test
+    public void deleteEquipmentApplyCorrectly(){
+        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
+        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
+        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+
+        equipmentApplyService.deleteEquipmentApply(this.entity.getId());
+    }
+
+
+    @Test
+    public void expectAccessDeniedExceptionWhenDeleteWithoutAuthority(){
         EquipmentApply equipmentApply = this.entity;
         equipmentApply.setAppliedUser(User.builder().id("test_2").build());
 
@@ -118,30 +139,17 @@ public class TestEquipmentApplyService {
         }
     }
 
-    @Test
-    public void delete_equipment_apply_correctly(){
-        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
-        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
-        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
-
-        equipmentApplyService.deleteEquipmentApply(this.entity.getId());
-    }
 
     @Test
-    public void update_equipment_apply_correctly(){
-        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
-        when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
-        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
+    public void expectNotFoundExceptionWhenFindNotExistEquipmentApply(){
+        when(equipmentApplyRepository.findById(anyInt())).thenReturn(Optional.ofNullable(null));
 
-        equipmentApplyService.updateEquipmentApply(this.entity.getId(), this.request);
+        try{
+            equipmentApplyService.findEquipmentApplyById(1);
+        }catch (NotFoundException e){
+            assertThat(e.getMessage(), is("Not found"));
+        }
     }
 
-    @Test
-    public void create_equipment_apply(){
-        when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
-        when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
-
-        equipmentApplyService.createEquipmentApply(this.request);
-    }
 
 }
