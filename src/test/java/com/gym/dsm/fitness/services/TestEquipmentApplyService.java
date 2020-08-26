@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -81,7 +80,7 @@ public class TestEquipmentApplyService {
 
 
     @Test
-    public void createEquipmentApply(){
+    public void expectNothingWhenCreateEquipmentApplyCorrectly(){
         when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
         when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
 
@@ -91,7 +90,7 @@ public class TestEquipmentApplyService {
 
 
     @Test
-    public void whenGetEquipmentApplyItShouldReturnEquipmentApplyList(){
+    public void expectToReturnEquipmentApplyWhenGetEquipmentApplyCorrectly(){
         ArrayList<EquipmentApply> equipmentApplies = new ArrayList<>();
         equipmentApplies.add(this.entity);
         when(equipmentApplyRepository.findAll()).thenReturn(equipmentApplies);
@@ -103,7 +102,7 @@ public class TestEquipmentApplyService {
 
 
     @Test
-    public void updateEquipmentApplyCorrectly(){
+    public void expectNothingWhenUpdateEquipmentApplyCorrectly(){
         when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
         when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
         when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
@@ -114,7 +113,7 @@ public class TestEquipmentApplyService {
 
 
     @Test
-    public void deleteEquipmentApplyCorrectly(){
+    public void expectNothingWhenDeleteEquipmentApplyCorrectly(){
         when(userRepository.findById(this.user.getId())).thenReturn(Optional.of(this.user));
         when(equipmentApplyRepository.findById(this.entity.getId())).thenReturn(Optional.of(this.entity));
         when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
