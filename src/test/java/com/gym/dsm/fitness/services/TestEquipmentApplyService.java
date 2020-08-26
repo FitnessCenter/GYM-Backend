@@ -12,7 +12,6 @@ import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -123,7 +122,7 @@ public class TestEquipmentApplyService {
 
 
     @Test
-    public void expectAccessDeniedExceptionWhenDeleteWithoutAuthority(){
+    public void expectAccessDeniedExceptionWhenVerifyAccessWithoutAuthority(){
         EquipmentApply equipmentApply = this.entity;
         equipmentApply.setAppliedUser(User.builder().id("test_2").build());
 
@@ -132,7 +131,7 @@ public class TestEquipmentApplyService {
         when(authenticationFacade.getUserId()).thenReturn(this.user.getId());
 
         try {
-            equipmentApplyService.deleteEquipmentApply(this.entity.getId());
+            equipmentApplyService.verifyAccessAuthority(this.entity);
         } catch (AccessDeniedException e){
             assertThat(e.getMessage(), is("Access denied"));
         }
