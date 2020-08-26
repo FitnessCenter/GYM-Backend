@@ -6,10 +6,10 @@ import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
+import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.EquipmentApplyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -68,10 +68,13 @@ public class TestEquipmentApplyController {
     @MockBean
     private EquipmentApplyService equipmentApplyService;
 
+    @MockBean
+    private JWTProvider jwtProvider;
+
     @Test
     public void testGetEquipmentApply() throws Exception{
-        List<EquipmentApply> response = new ArrayList<>();
-        response.add(this.entity);
+        List<EquipmentApplyResponse> response = new ArrayList<>();
+        response.add(this.response);
         when(equipmentApplyService.getEquipmentApplies()).thenReturn(response);
 
         mvc.perform(MockMvcRequestBuilders
