@@ -15,7 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JWTProvider jwtProvider;
 
     @Bean
@@ -26,12 +26,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable();
-        httpSecurity.formLogin().disable();
-        httpSecurity.authorizeRequests()
-                        .antMatchers("/auth").permitAll()
-                    .and()
-                        .apply(new JWTConfigurer(jwtProvider));
+        httpSecurity
+                .csrf().disable()
+                .cors().and()
+                .sessionManagement().disable()
+                .formLogin().disable()
+                .authorizeRequests()
+                .antMatchers("/auth").permitAll()
+                .antMatchers(HttpMethod.POST, "/account").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .apply(new JWTConfigurer(jwtProvider));
 
     }
 
