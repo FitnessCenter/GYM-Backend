@@ -10,15 +10,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    private JWTProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
     @Override
     public SignInResponse signIn(SignInRequest signInRequest) {
