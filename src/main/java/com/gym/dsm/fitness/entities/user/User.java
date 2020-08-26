@@ -24,6 +24,9 @@ public class User {
 
     private boolean sex;
 
+    @OneToMany(mappedBy = "appliedUser", cascade = CascadeType.ALL)
+    private List<EquipmentApply> equipmentApplies;
+
     public User updatePassword(String password) {
         this.password = password;
         return this;

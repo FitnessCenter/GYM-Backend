@@ -7,9 +7,11 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
     BAD_REQUEST(400, "Bad Request"),
-    AUTHENTICATION_FAILED(401, "Authentication failed"),
+    USER_ALREADY_EXISTS(409, "User alraedy exists"),
+    NOT_FOUND(404, "Not found"),
     PASSWORD_NOT_MATCH(403, "Password not match"),
-    USER_ALREADY_EXISTS(409, "User alraedy exists");
+    ACCESS_DENIED(403, "Access denied"),
+    TOKEN_AUTHENTICATION_FAILED(401, "Authentication failed");
 
     private final int status;
 
