@@ -3,9 +3,8 @@ package com.gym.dsm.fitness.controllers;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
-import com.gym.dsm.fitness.services.AccountService;
+import com.gym.dsm.fitness.services.Account.AccountService;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

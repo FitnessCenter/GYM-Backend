@@ -10,6 +10,7 @@ import com.gym.dsm.fitness.exceptions.NotFoundException;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {EquipmentApplyServiceImp.class, ModelMapperConfiguration.class})
+@SpringBootTest(classes = {EquipmentApplyServiceImpl.class, ModelMapperConfiguration.class})
 public class TestEquipmentApplyService {
 
     @MockBean
@@ -42,7 +43,7 @@ public class TestEquipmentApplyService {
     AuthenticationFacade authenticationFacade;
 
     @Autowired
-    EquipmentApplyServiceImp equipmentApplyService;
+    EquipmentApplyServiceImpl equipmentApplyService;
 
     private final User user = User
             .builder()
@@ -53,7 +54,7 @@ public class TestEquipmentApplyService {
             .builder()
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
@@ -62,7 +63,7 @@ public class TestEquipmentApplyService {
             .id(1)
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
@@ -71,7 +72,7 @@ public class TestEquipmentApplyService {
             .id(1)
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .appliedUser(user)
             .build();
