@@ -61,7 +61,7 @@ public class JWTProvider {
         if (bearerToken != null && bearerToken.startsWith(prefix)) {
             return bearerToken.substring(7);
         }
-        throw new AuthenticationFailedException();
+        return null;
     }
 
     public boolean validateToken(String token) {
