@@ -1,4 +1,4 @@
-package com.gym.dsm.fitness.services;
+package com.gym.dsm.fitness.services.Account;
 
 import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.entities.user.repository.UserRepository;
@@ -9,6 +9,7 @@ import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
+import com.gym.dsm.fitness.services.Account.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

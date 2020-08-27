@@ -11,7 +11,7 @@ public enum ErrorCode {
     NOT_FOUND(404, "Not found"),
     PASSWORD_NOT_MATCH(403, "Password not match"),
     ACCESS_DENIED(403, "Access denied"),
-    TOKEN_AUTHENTICATION_FAILED(401, "Authentication failed");
+    AUTHENTICATION_FAILED(401, "Authentication failed");
 
     private final int status;
 

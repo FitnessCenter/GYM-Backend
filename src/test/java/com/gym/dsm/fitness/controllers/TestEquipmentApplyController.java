@@ -7,7 +7,7 @@ import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.JWTProvider;
-import com.gym.dsm.fitness.services.EquipmentApplyService;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class TestEquipmentApplyController {
             .builder()
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
@@ -47,7 +47,7 @@ public class TestEquipmentApplyController {
             .id(1)
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
@@ -56,7 +56,7 @@ public class TestEquipmentApplyController {
             .id(1)
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .appliedUser(User.builder().build())
             .build();

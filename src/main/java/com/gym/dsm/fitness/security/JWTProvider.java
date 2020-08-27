@@ -36,7 +36,7 @@ public class JWTProvider {
     @Value("${auth.jwt.prefix}")
     private String prefix;
 
-    private AuthDetailsService authDetailsService;
+    private final AuthDetailsService authDetailsService;
 
     public String generateAccessToken(String id) {
         return Jwts.builder()
@@ -61,7 +61,7 @@ public class JWTProvider {
         if (bearerToken != null && bearerToken.startsWith(prefix)) {
             return bearerToken.substring(7);
         }
-        throw new AuthenticationFailedException();
+        return null;
     }
 
     public boolean validateToken(String token) {
