@@ -14,11 +14,21 @@ jobs:
 
       - name: build and test
         run: |
-          gredlew build
+          gradlew build
     
   DOCKER_BUILD_PUSH:
     needs: [CI]
     runs-on: ubuntu-latest
+    env:
+      MYSQL_URL: ${{ secrets.MYSQL_URL }}
+      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      PORT: ${{ secrets.PORT }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_EXP_ACCESS: ${{ secrets.JWT_EXP_ACCESS }}
+      JWT_EXP_REFRESH: ${{ secrets.JWT_EXP_REFRESH }}
+      JWT_HEADER: ${{ secrets.JWT_HEADER }}
+      JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
     steps:
       - uses: actions/checkout@v2
 
