@@ -12,6 +12,7 @@ import com.gym.dsm.fitness.services.EquipmentApplyServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = EquipmentApplyController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class TestEquipmentApplyController {
 
     private final String url = "/equipment-applies";
@@ -85,6 +87,13 @@ public class TestEquipmentApplyController {
     }
 
     @Test
+    public void expect200WhenGetEquipmentWithQueryPram() throws Exception{
+        ResultActions action = mvc.perform(MockMvcRequestBuilders
+                .get(url+"?whose=men"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testCreateEquipmentApply() throws Exception{
         mvc.perform(MockMvcRequestBuilders
                 .post(url)
@@ -109,34 +118,6 @@ public class TestEquipmentApplyController {
                 .delete(url+"/1"))
                 .andExpect(status().isOk());
 
-    }
-
-    @Test
-    public void expect200WhenGetEquipmentWithWhoseMens() throws Exception{
-        ResultActions action = mvc.perform(MockMvcRequestBuilders
-                .delete(url+"?whose=men"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void expect200WhenGetEquipmentWithWhoseWomen() throws Exception{
-        ResultActions action = mvc.perform(MockMvcRequestBuilders
-                .delete(url+"?whose=women"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void expect200WhenEquipmentWithWhoseMe() throws Exception{
-        ResultActions action = mvc.perform(MockMvcRequestBuilders
-                .delete(url+"?whose=me"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    public void expect400WhenEquipmentWithUnexpectedWhoseParameter() throws Exception{
-        ResultActions action = mvc.perform(MockMvcRequestBuilders
-                .delete(url+"?whose=eojin"))
-                .andExpect(status().isBadRequest());
     }
 }
 
