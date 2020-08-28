@@ -14,6 +14,7 @@ jobs:
 
       - name: build and test
         run: |
+          chmod +777 gradlew
           ./gradlew build
     
   DOCKER_BUILD_PUSH:
