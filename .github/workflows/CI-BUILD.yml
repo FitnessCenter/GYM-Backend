@@ -14,7 +14,7 @@ jobs:
 
       - name: build and test
         run: |
-          gradlew build
+          .\gradlew build
     
   DOCKER_BUILD_PUSH:
     needs: [CI]
