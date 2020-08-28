@@ -7,8 +7,7 @@ import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.JWTProvider;
-import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
-import com.gym.dsm.fitness.services.EquipmentApplyServiceImp;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +68,7 @@ public class TestEquipmentApplyController {
     MockMvc mvc;
 
     @MockBean
-    private EquipmentApplyServiceImp equipmentApplyService;
+    private EquipmentApplyServiceImpl equipmentApplyService;
 
     @MockBean
     private JWTProvider jwtProvider;
