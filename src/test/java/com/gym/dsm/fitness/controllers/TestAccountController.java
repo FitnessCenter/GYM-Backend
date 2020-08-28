@@ -4,11 +4,16 @@ import com.gym.dsm.fitness.FitnessApplication;
 import com.gym.dsm.fitness.payloads.requests.CreateAccountRequest;
 import com.gym.dsm.fitness.payloads.requests.UpdatePasswordRequest;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
+import com.gym.dsm.fitness.security.JWTFilter;
 import com.gym.dsm.fitness.security.JWTProvider;
+import com.gym.dsm.fitness.security.auth.AuthDetailsService;
 import com.gym.dsm.fitness.services.Account.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ContextConfiguration;
@@ -30,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = AccountController.class)
 @ContextConfiguration(classes = {FitnessApplication.class, JWTProvider.class})
+@AutoConfigureMockMvc(addFilters = false)
 class TestAccountController {
 
     @Autowired
@@ -39,7 +45,7 @@ class TestAccountController {
     private AccountService accountService;
 
     @MockBean
-    private JWTProvider jwtProvider;
+    private AuthDetailsService authDetailsService;
 
     @Test
     public void testGetAccount() throws Exception {
@@ -74,7 +80,7 @@ class TestAccountController {
             case "GET":
                 MockRequestBuilder getMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(get(url))
-                        .token("Bearer eya.b.c")
+                        .token("Bearer eya.eyb.c.")
                         .build();
 
                 GetAccountResponse getMockResponse = GetAccountResponse.builder()
@@ -113,7 +119,7 @@ class TestAccountController {
 
                 MockRequestBuilder putMockRequestBuilder = MockRequestBuilder.builder()
                         .requestBuilder(put(url))
-                        .token("Bearer eya.b.c")
+                        .token("Bearer eya.eyb.c.")
                         .body(updatePasswordRequest)
                         .build();
 

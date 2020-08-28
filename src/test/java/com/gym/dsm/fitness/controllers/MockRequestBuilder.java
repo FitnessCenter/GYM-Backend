@@ -18,7 +18,7 @@ public class MockRequestBuilder {
 
     private MockHttpServletRequestBuilder requestMapping() throws Exception {
         MockHttpServletRequestBuilder request = requestBuilder.contentType(MediaType.APPLICATION_JSON);
-        if (token != null) request.header("Authorzation", token);
+        if (token != null) request.header("Authorization", token);
         if (body != null) request.content(jsonMapper(body));
         return request;
     }
