@@ -22,10 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: build and test
+      - name: test
         run: |
           chmod +777 gradlew
-          ./gradlew build
+          ./gradlew test
     
   DOCKER_BUILD_PUSH:
     needs: [CI]
@@ -42,6 +42,11 @@ jobs:
       JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
     steps:
       - uses: actions/checkout@v2
+
+      - name: build java
+        run: |
+          chmod +777 gradlew
+          ./gradlew build
 
       - name: build docker image
         run: docker build -t migsking/fitness .
