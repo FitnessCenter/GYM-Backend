@@ -48,6 +48,7 @@ public class TestEquipmentApplyService {
     private final User user = User
             .builder()
             .id("user")
+            .sex(true)
             .build();
 
     private final EquipmentApplyRequest request = EquipmentApplyRequest
@@ -75,6 +76,7 @@ public class TestEquipmentApplyService {
             .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .appliedUser(user)
+            .sex(user.isSex())
             .build();
 
 

@@ -10,6 +10,7 @@ public interface EquipmentApplyRepository extends CrudRepository<EquipmentApply,
     EquipmentApply save(EquipmentApply equipmentApply);
     List<EquipmentApply> findAll();
     List<EquipmentApply> findByAppliedUserId(String applyUserId);
+    List<EquipmentApply> findBySex(Boolean sex);
     Optional<EquipmentApply> findById(Integer id);
 
     @Override
