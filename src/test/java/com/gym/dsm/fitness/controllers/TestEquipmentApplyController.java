@@ -7,11 +7,7 @@ import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.JWTProvider;
-<<<<<<< HEAD
 import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
-=======
-import com.gym.dsm.fitness.services.EquipmentApplyService;
->>>>>>> remotes/origin/master
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
