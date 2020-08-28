@@ -25,6 +25,8 @@ jobs:
         run: |
           chmod +777 gradlew
           ./gradlew test
+          echo $MYSQL_URL
+          echo $MYSQL_USERNAME
     
   DOCKER_BUILD_PUSH:
     needs: [CI]
