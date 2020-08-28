@@ -13,7 +13,6 @@ jobs:
       MYSQL_URL: ${{ secrets.MYSQL_URL }}
       MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      PORT: ${{ secrets.PORT }}
       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       JWT_EXP_ACCESS: ${{ secrets.JWT_EXP_ACCESS }}
       JWT_EXP_REFRESH: ${{ secrets.JWT_EXP_REFRESH }}
@@ -34,7 +33,6 @@ jobs:
       MYSQL_URL: ${{ secrets.MYSQL_URL }}
       MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
       MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-      PORT: ${{ secrets.PORT }}
       JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
       JWT_EXP_ACCESS: ${{ secrets.JWT_EXP_ACCESS }}
       JWT_EXP_REFRESH: ${{ secrets.JWT_EXP_REFRESH }}
