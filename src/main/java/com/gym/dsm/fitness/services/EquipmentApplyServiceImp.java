@@ -46,6 +46,7 @@ public class EquipmentApplyServiceImp implements EquipmentApplyService {
                 .equipmentName(request.getEquipmentName())
                 .purchaseLink(request.getPurchaseLink())
                 .price(request.getPrice())
+                .sex(user.isSex())
                 .appliedUser(user)
                 .build();
 
