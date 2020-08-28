@@ -6,6 +6,7 @@ import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.entities.user.repository.UserRepository;
 import com.gym.dsm.fitness.exceptions.AccessDeniedException;
 import com.gym.dsm.fitness.exceptions.AuthenticationFailedException;
+import com.gym.dsm.fitness.exceptions.BadRequestException;
 import com.gym.dsm.fitness.exceptions.NotFoundException;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
@@ -37,6 +38,37 @@ public class EquipmentApplyServiceImp implements EquipmentApplyService {
     }
 
     @Override
+    public List<EquipmentApplyResponse> getEquipmentAppliesList(String whose) {
+        User user = userRepository.findById(authenticationFacade.getUserId())
+                .orElseThrow(AuthenticationFailedException::new);
+
+        List<EquipmentApply> equipmentApplies;
+
+        if(whose == null){
+            equipmentApplies = equipmentApplyRepository.findAll();
+        }
+        else {
+            switch (whose) {
+                case "men":
+                    equipmentApplies = equipmentApplyRepository.findBySex(true);
+                    break;
+                case "women":
+                    equipmentApplies = equipmentApplyRepository.findBySex(false);
+                    break;
+                case "me":
+                    equipmentApplies = equipmentApplyRepository.findByAppliedUserId(user.getId());
+                    break;
+                default:
+                    throw new BadRequestException();
+            }
+        }
+
+        return equipmentApplies.stream()
+                .map((e) -> modelMapper.map(e, EquipmentApplyResponse.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void createEquipmentApply(EquipmentApplyRequest request) {
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
@@ -46,6 +78,7 @@ public class EquipmentApplyServiceImp implements EquipmentApplyService {
                 .equipmentName(request.getEquipmentName())
                 .purchaseLink(request.getPurchaseLink())
                 .price(request.getPrice())
+                .sex(user.isSex())
                 .appliedUser(user)
                 .build();
 

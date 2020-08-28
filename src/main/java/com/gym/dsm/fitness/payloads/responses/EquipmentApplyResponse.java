@@ -31,4 +31,6 @@ public class EquipmentApplyResponse {
     @NotBlank
     @NotEmpty
     private String purchaseLink;
+
+    private GetAccountResponse appliedUser;
 }

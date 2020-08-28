@@ -1,5 +1,6 @@
 package com.gym.dsm.fitness.entities.user;
 
+import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import lombok.*;
 import javax.persistence.*;
 import java.util.List;

@@ -21,9 +21,19 @@ public class EquipmentApply {
     @JoinColumn(name = "applied_user_id", nullable = false)
     private User appliedUser;
 
+    @Column(nullable = false)
+    private Boolean sex;
+
+    @Column(nullable = false)
     private Integer numberOfApply;
+
+    @Column(nullable = false)
     private Integer price;
+
+    @Column(nullable = false)
     private String equipmentName;
+
+    @Column(nullable = false)
     private String purchaseLink;
 
 }
