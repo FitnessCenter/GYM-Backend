@@ -8,6 +8,7 @@ import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.JWTProvider;
 import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
+import com.gym.dsm.fitness.services.EquipmentApplyServiceImp;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,7 @@ public class TestEquipmentApplyController {
     MockMvc mvc;
 
     @MockBean
-    private EquipmentApplyService equipmentApplyService;
+    private EquipmentApplyServiceImp equipmentApplyService;
 
     @MockBean
     private JWTProvider jwtProvider;
@@ -110,5 +111,32 @@ public class TestEquipmentApplyController {
 
     }
 
+    @Test
+    public void expect200WhenGetEquipmentWithWhoseMens() throws Exception{
+        ResultActions action = mvc.perform(MockMvcRequestBuilders
+                .delete(url+"?whose=men"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void expect200WhenGetEquipmentWithWhoseWomen() throws Exception{
+        ResultActions action = mvc.perform(MockMvcRequestBuilders
+                .delete(url+"?whose=women"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void expect200WhenEquipmentWithWhoseMe() throws Exception{
+        ResultActions action = mvc.perform(MockMvcRequestBuilders
+                .delete(url+"?whose=me"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void expect400WhenEquipmentWithUnexpectedWhoseParameter() throws Exception{
+        ResultActions action = mvc.perform(MockMvcRequestBuilders
+                .delete(url+"?whose=eojin"))
+                .andExpect(status().isBadRequest());
+    }
 }
 
