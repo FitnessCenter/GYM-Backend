@@ -6,10 +6,12 @@ import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.entities.user.repository.UserRepository;
 import com.gym.dsm.fitness.exceptions.AccessDeniedException;
 import com.gym.dsm.fitness.exceptions.AuthenticationFailedException;
+import com.gym.dsm.fitness.exceptions.BadRequestException;
 import com.gym.dsm.fitness.exceptions.NotFoundException;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,37 @@ public class EquipmentApplyServiceImpl implements EquipmentApplyService {
     }
 
     @Override
+    public List<EquipmentApplyResponse> getEquipmentAppliesList(String whose) {
+        User user = userRepository.findById(authenticationFacade.getUserId())
+                .orElseThrow(AuthenticationFailedException::new);
+
+        List<EquipmentApply> equipmentApplies;
+
+        if(whose == null){
+            equipmentApplies = equipmentApplyRepository.findAll();
+        }
+        else {
+            switch (whose) {
+                case "men":
+                    equipmentApplies = equipmentApplyRepository.findBySex(true);
+                    break;
+                case "women":
+                    equipmentApplies = equipmentApplyRepository.findBySex(false);
+                    break;
+                case "me":
+                    equipmentApplies = equipmentApplyRepository.findByAppliedUserId(user.getId());
+                    break;
+                default:
+                    throw new BadRequestException();
+            }
+        }
+
+        return equipmentApplies.stream()
+                .map((e) -> modelMapper.map(e, EquipmentApplyResponse.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void createEquipmentApply(EquipmentApplyRequest request) {
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
@@ -46,6 +79,7 @@ public class EquipmentApplyServiceImpl implements EquipmentApplyService {
                 .equipmentName(request.getEquipmentName())
                 .purchaseLink(request.getPurchaseLink())
                 .price(request.getPrice())
+                .sex(user.isSex())
                 .appliedUser(user)
                 .build();
 
