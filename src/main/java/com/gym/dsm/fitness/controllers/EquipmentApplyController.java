@@ -18,8 +18,8 @@ public class EquipmentApplyController {
     private final EquipmentApplyService equipmentApplyService;
 
     @GetMapping
-    public List<EquipmentApplyResponse> getEquipmentApplies() {
-        return equipmentApplyService.getEquipmentApplies();
+    public List<EquipmentApplyResponse> getEquipmentApplies(@RequestParam( required = false )String whose) {
+        return equipmentApplyService.getEquipmentAppliesList(whose);
     }
 
     @PostMapping
