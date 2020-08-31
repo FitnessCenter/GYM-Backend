@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,13 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
     private final UserRepository userRepository;
     private final AuthenticationFacade authenticationFacade;
     private final ModelMapper modelMapper;
-    Date exerciseAppliesInitDate = new Date();
+    Integer exerciseAppliesInitDay = null;
+
+    @Value("${service.apply-start-time}")
+    Integer applyStartTime;
+
+    @Value("${service.apply-close-time}")
+    Integer applyCloseTime;
 
     @Value("${service.number-of-exercise-time}")
     Integer numberOfTime;
@@ -39,16 +46,13 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
     @Override
     public List<GetExerciseApplyResponse> getExerciseApplies(){
-        initExerciseApply();
-
-        List<GetExerciseApplyResponse> appliesPerTime = new ArrayList<>();
-
-        List<ExerciseApply> applies = exerciseApplyRepository.findAll();
-
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
 
-        Integer applyLimit = 10;
+        initExerciseApply();
+
+        List<GetExerciseApplyResponse> appliesPerTime = new ArrayList<>();
+        List<ExerciseApply> applies = exerciseApplyRepository.findAll();
 
         for(int i = 0; i < numberOfTime; i++){
             Boolean isApplied = false;
@@ -101,6 +105,7 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
         initExerciseApply();
         validateTime(time);
+        checkNowIsApplyTime();
         checkApplyLimitOfTime(time);
 
         checkUserApplySeveralTimes(user);
@@ -120,6 +125,8 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
 
+        initExerciseApply();
+
         ExerciseApply exerciseApply = user.getExerciseApply();
 
         if(exerciseApply == null){
@@ -135,6 +142,8 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
     public GetExerciseApplyOfUserResponse getExerciseApplyOfUser() {
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
+
+        initExerciseApply();
 
         ExerciseApply exerciseApply = user.getExerciseApply();
 
@@ -168,13 +177,22 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
 
     void initExerciseApply(){
-//        Date currentTime = new Date();
-//
-//        if(){
-//            throw new ForbiddenTimeException();
-//        }
-//        else if(){
-//
-//        }
+        Calendar cal = Calendar.getInstance();
+        Integer currentDay = cal.get(Calendar.DAY_OF_MONTH);
+
+        if(exerciseAppliesInitDay == null || exerciseAppliesInitDay != currentDay){
+            exerciseAppliesInitDay = currentDay;
+            exerciseApplyRepository.deleteAll();
+        }
     }
+
+    void checkNowIsApplyTime(){
+        Calendar cal = Calendar.getInstance();
+        Integer currentHourAndMinute = cal.get(Calendar.HOUR_OF_DAY)*100 + cal.get(Calendar.MINUTE);
+
+        if(currentHourAndMinute < applyStartTime || currentHourAndMinute > applyCloseTime){
+            throw new ForbiddenTimeException();
+        }
+    }
+
 }
