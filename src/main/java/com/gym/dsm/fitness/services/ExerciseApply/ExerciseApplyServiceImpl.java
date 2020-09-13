@@ -177,7 +177,7 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
 
     void initExerciseApply(){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
         Integer currentDay = cal.get(Calendar.DAY_OF_MONTH);
 
         if(exerciseAppliesInitDay == null || exerciseAppliesInitDay != currentDay){
@@ -187,7 +187,7 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
     }
 
     void checkNowIsApplyTime(){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
         Integer currentHourAndMinute = cal.get(Calendar.HOUR_OF_DAY)*100 + cal.get(Calendar.MINUTE);
 
         if(currentHourAndMinute < applyStartTime || currentHourAndMinute > applyCloseTime){
