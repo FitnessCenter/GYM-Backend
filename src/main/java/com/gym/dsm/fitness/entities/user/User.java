@@ -26,6 +26,10 @@ public class User {
 
     private boolean sex;
 
+    @Column
+    @ColumnDefault("0")
+    private Integer numberOfDaysExercised;
+
     @OneToMany(mappedBy = "appliedUser", cascade = CascadeType.ALL)
     private List<EquipmentApply> equipmentApplies;
 
@@ -35,5 +39,9 @@ public class User {
     public User updatePassword(String password) {
         this.password = password;
         return this;
+    }
+
+    public void increaseNumberOfDaysExercised(){
+        this.numberOfDaysExercised += 1;
     }
 }
