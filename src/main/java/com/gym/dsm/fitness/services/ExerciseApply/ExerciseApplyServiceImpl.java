@@ -9,16 +9,14 @@ import com.gym.dsm.fitness.exceptions.*;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.payloads.responses.GetExerciseApplyOfUserResponse;
 import com.gym.dsm.fitness.payloads.responses.GetExerciseApplyResponse;
+import com.gym.dsm.fitness.payloads.responses.GetNumberOfDaysExercisedOfUserResponse;
 import com.gym.dsm.fitness.security.auth.AuthenticationFacade;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,10 +44,10 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
     @Override
     public List<GetExerciseApplyResponse> getExerciseApplies(){
+        initExerciseApply();
+
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
-
-        initExerciseApply();
 
         List<GetExerciseApplyResponse> appliesPerTime = new ArrayList<>();
         List<ExerciseApply> applies = exerciseApplyRepository.findAll();
@@ -100,10 +98,11 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
     @Override
     public void applyExercise(Integer time){
+        initExerciseApply();
+
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
 
-        initExerciseApply();
         validateTime(time);
         checkNowIsApplyTime();
         checkApplyLimitOfTime(time);
@@ -122,10 +121,10 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
     @Override
     public void deleteExerciseApplyOfUser() {
+        initExerciseApply();
+
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
-
-        initExerciseApply();
 
         ExerciseApply exerciseApply = user.getExerciseApply();
 
@@ -140,10 +139,10 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
     @Override
     public GetExerciseApplyOfUserResponse getExerciseApplyOfUser() {
+        initExerciseApply();
+        
         User user = userRepository.findById(authenticationFacade.getUserId())
                 .orElseThrow(AuthenticationFailedException::new);
-
-        initExerciseApply();
 
         ExerciseApply exerciseApply = user.getExerciseApply();
 
@@ -153,6 +152,15 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
         return modelMapper.map(exerciseApply, GetExerciseApplyOfUserResponse.class);
     }
 
+    @Override
+    public GetNumberOfDaysExercisedOfUserResponse getNumberOfDaysExercisedOfUser() {
+        initExerciseApply();
+
+        User user = userRepository.findById(authenticationFacade.getUserId())
+                .orElseThrow(AuthenticationFailedException::new);
+
+        return modelMapper.map(user, GetNumberOfDaysExercisedOfUserResponse.class);
+    }
 
     void validateTime(Integer time) {
         if (time < 0 && time >= numberOfTime) {
@@ -177,17 +185,31 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
 
     void initExerciseApply(){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
         Integer currentDay = cal.get(Calendar.DAY_OF_MONTH);
 
-        if(exerciseAppliesInitDay == null || exerciseAppliesInitDay != currentDay){
+        if(exerciseAppliesInitDay == null || !exerciseAppliesInitDay.equals(currentDay)){
             exerciseAppliesInitDay = currentDay;
+            increaseAppliedUsersNumberOfDaysExercisedApply();
             exerciseApplyRepository.deleteAll();
         }
     }
 
+
+    void increaseAppliedUsersNumberOfDaysExercisedApply(){
+        List<ExerciseApply> exerciseApplies = exerciseApplyRepository.findAll();
+
+        for(int i=0; i < exerciseApplies.size(); i++){
+            User appliedUser = exerciseApplies.get(i).getAppliedUser();
+
+            appliedUser.increaseNumberOfDaysExercised();
+            userRepository.save(appliedUser);
+        }
+    }
+
+
     void checkNowIsApplyTime(){
-        Calendar cal = Calendar.getInstance();
+        Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
         Integer currentHourAndMinute = cal.get(Calendar.HOUR_OF_DAY)*100 + cal.get(Calendar.MINUTE);
 
         if(currentHourAndMinute < applyStartTime || currentHourAndMinute > applyCloseTime){

@@ -3,6 +3,7 @@ package com.gym.dsm.fitness.controllers;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.payloads.responses.GetExerciseApplyOfUserResponse;
 import com.gym.dsm.fitness.payloads.responses.GetExerciseApplyResponse;
+import com.gym.dsm.fitness.payloads.responses.GetNumberOfDaysExercisedOfUserResponse;
 import com.gym.dsm.fitness.services.ExerciseApply.ExerciseApplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,11 @@ public class ExerciseApplyController {
     @DeleteMapping("/my")
     public void deleteExerciseApplyOfUser(){
         exerciseApplyService.deleteExerciseApplyOfUser();
+    }
+
+    @GetMapping("/my/number-of-days-exercised")
+    public GetNumberOfDaysExercisedOfUserResponse getNumberOfDaysExercisedOfUser() {
+        return exerciseApplyService.getNumberOfDaysExercisedOfUser();
     }
 
 }

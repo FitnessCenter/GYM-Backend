@@ -3,6 +3,7 @@ package com.gym.dsm.fitness.services.ExerciseApply;
 import com.gym.dsm.fitness.payloads.responses.GetAccountResponse;
 import com.gym.dsm.fitness.payloads.responses.GetExerciseApplyOfUserResponse;
 import com.gym.dsm.fitness.payloads.responses.GetExerciseApplyResponse;
+import com.gym.dsm.fitness.payloads.responses.GetNumberOfDaysExercisedOfUserResponse;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface ExerciseApplyService {
     void applyExercise(Integer time);
     void deleteExerciseApplyOfUser();
     GetExerciseApplyOfUserResponse getExerciseApplyOfUser();
+    GetNumberOfDaysExercisedOfUserResponse getNumberOfDaysExercisedOfUser();
 }
