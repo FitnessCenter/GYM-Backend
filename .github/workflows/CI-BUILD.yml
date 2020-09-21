@@ -1,0 +1,59 @@
+name: CI 
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    env:
+      MYSQL_URL: ${{ secrets.MYSQL_URL }}
+      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_EXP_ACCESS: ${{ secrets.JWT_EXP_ACCESS }}
+      JWT_EXP_REFRESH: ${{ secrets.JWT_EXP_REFRESH }}
+      JWT_HEADER: ${{ secrets.JWT_HEADER }}
+      JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: test
+        run: |
+          chmod +777 gradlew
+          ./gradlew test
+          echo $MYSQL_URL
+          echo $MYSQL_USERNAME
+    
+  DOCKER_BUILD_PUSH:
+    needs: [CI]
+    runs-on: ubuntu-latest
+    env:
+      MYSQL_URL: ${{ secrets.MYSQL_URL }}
+      MYSQL_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+      MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+      JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+      JWT_EXP_ACCESS: ${{ secrets.JWT_EXP_ACCESS }}
+      JWT_EXP_REFRESH: ${{ secrets.JWT_EXP_REFRESH }}
+      JWT_HEADER: ${{ secrets.JWT_HEADER }}
+      JWT_PREFIX: ${{ secrets.JWT_PREFIX }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: build java
+        run: |
+          chmod +777 gradlew
+          ./gradlew build
+
+      - name: build docker image
+        run: docker build -t migsking/fitness .
+
+      - name: publish to Registry
+        uses: elgohr/Publish-Docker-Github-Action@master
+        with:
+          name: migsking/fitness
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}

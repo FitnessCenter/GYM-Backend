@@ -5,13 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Builder
-public class GetAccountResponse {
-    private String StudentName;
-
-    private String studentNumber;
+@AllArgsConstructor
+@NoArgsConstructor
+public class GetExerciseApplyOfUserResponse {
+    private Integer time;
 }

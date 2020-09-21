@@ -6,11 +6,12 @@ import com.gym.dsm.fitness.entities.equipmentApply.EquipmentApply;
 import com.gym.dsm.fitness.entities.user.User;
 import com.gym.dsm.fitness.payloads.requests.EquipmentApplyRequest;
 import com.gym.dsm.fitness.payloads.responses.EquipmentApplyResponse;
-import com.gym.dsm.fitness.services.EquipmentApplyService;
+import com.gym.dsm.fitness.security.JWTProvider;
+import com.gym.dsm.fitness.services.EquipmentApply.EquipmentApplyServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = EquipmentApplyController.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class TestEquipmentApplyController {
 
     private final String url = "/equipment-applies";
@@ -38,7 +40,7 @@ public class TestEquipmentApplyController {
             .builder()
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
@@ -47,7 +49,7 @@ public class TestEquipmentApplyController {
             .id(1)
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .build();
 
@@ -56,7 +58,7 @@ public class TestEquipmentApplyController {
             .id(1)
             .numberOfApply(12)
             .price(3000)
-            .equipmentName("12kg 덤벨")
+            .equipmentName("12kg ??")
             .purchaseLink("http://bitly.kr/ZUuEfi7UgVx")
             .appliedUser(User.builder().build())
             .build();
@@ -66,17 +68,27 @@ public class TestEquipmentApplyController {
     MockMvc mvc;
 
     @MockBean
-    private EquipmentApplyService equipmentApplyService;
+    private EquipmentApplyServiceImpl equipmentApplyService;
+
+    @MockBean
+    private JWTProvider jwtProvider;
 
     @Test
     public void testGetEquipmentApply() throws Exception{
-        List<EquipmentApply> response = new ArrayList<>();
-        response.add(this.entity);
+        List<EquipmentApplyResponse> response = new ArrayList<>();
+        response.add(this.response);
         when(equipmentApplyService.getEquipmentApplies()).thenReturn(response);
 
         mvc.perform(MockMvcRequestBuilders
                 .get(url))
                 .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void expect200WhenGetEquipmentWithQueryPram() throws Exception{
+        ResultActions action = mvc.perform(MockMvcRequestBuilders
+                .get(url+"?whose=men"))
                 .andExpect(status().isOk());
     }
 
@@ -106,6 +118,5 @@ public class TestEquipmentApplyController {
                 .andExpect(status().isOk());
 
     }
-
 }
 
