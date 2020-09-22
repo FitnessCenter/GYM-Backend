@@ -62,7 +62,8 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(AuthenticationFailedException::new);
 
         if (passwordEncoder.matches(updatePasswordRequest.getCurrentPassword(), user.getPassword())) {
-            userRepository.save(user.updatePassword(updatePasswordRequest.getNewPassword()));
+            userRepository.save(user.updatePassword(
+                    passwordEncoder.encode(updatePasswordRequest.getNewPassword())));
         } else {
             throw new PasswordNotMatchException();
         }
