@@ -61,11 +61,11 @@ public class ExerciseApplyServiceImpl implements ExerciseApplyService{
 
                 if(apply.getExerciseTime() == i){
                     numberOfAppliedUser += 1;
-                }
-                if(apply.getAppliedUser() == user){
-                    isApplied = true;
-                }
 
+                    if(apply.getAppliedUser().equals(user)){
+                        isApplied = true;
+                    }
+                }
             }
 
             appliesPerTime.add(
